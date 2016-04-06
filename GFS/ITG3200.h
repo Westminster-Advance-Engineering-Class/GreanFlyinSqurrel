@@ -11,7 +11,7 @@
 /*=========================================================================
     I2C ADDRESS/BITS
     -----------------------------------------------------------------------*/
-    #define ITG3200_ADDRESS_GYRO            (0xAD0 >> 1)         // 
+    #define ITG3200_ADDRESS_GYRO            (0x69)         // 
 /*=========================================================================*/
 
 /*=========================================================================
@@ -33,61 +33,52 @@
       ITG3200_REGISTER_GYRO_GYRO_ZOUT_H =   0X21,
       ITG3200_REGISTER_GYRO_GYRO_ZOUT_L =   0X22,
       ITG3200_REGISTER_GYRO_PWR_MGM =       0X3E
-    } hmc5883MagRegisters_t;
+    } itg3200GyroRegisters_t;
 /*=========================================================================*/
 
-/*=========================================================================
-    MAGNETOMETER GAIN SETTINGS
+/*=========================================================================*
+    SETTINGS
     -----------------------------------------------------------------------*/
+
     typedef enum
     {
-      HMC5883_MAGGAIN_1_3                        = 0x20,  // +/- 1.3
-      HMC5883_MAGGAIN_1_9                        = 0x40,  // +/- 1.9
-      HMC5883_MAGGAIN_2_5                        = 0x60,  // +/- 2.5
-      HMC5883_MAGGAIN_4_0                        = 0x80,  // +/- 4.0
-      HMC5883_MAGGAIN_4_7                        = 0xA0,  // +/- 4.7
-      HMC5883_MAGGAIN_5_6                        = 0xC0,  // +/- 5.6
-      HMC5883_MAGGAIN_8_1                        = 0xE0   // +/- 8.1
-    } hmc5883MagGain;  
+      DLPF_CFG_0 =    0x01; //1<<0;
+      DLPF_CFG_1 =    0x02; //1<<1;
+      DLPF_CFG_2 =    0x04; //1<<2;
+      DLPF_FS_SEL_0 = 0x08; //1<<3;
+      DLPF_FS_SEL_1 = 0x10; //1<<4;
+      PWR_MGM_RESET = 0x40; //1<<6;
+    } itg3200GyroSettings_t;
 /*=========================================================================*/
 
 /*=========================================================================
     INTERNAL MAGNETOMETER DATA TYPE
     -----------------------------------------------------------------------*/
-    typedef struct hmc5883MagData_s
+    typedef struct itg3200GyroData_s
     {
         float x;
         float y;
         float z;
-      float orientation;
-    } hmc5883MagData;
-/*=========================================================================*/
-
-/*=========================================================================
-    CHIP ID
-    -----------------------------------------------------------------------*/
-    #define HMC5883_ID                     (0b11010100)
+    } itg3200GyroData;
 /*=========================================================================*/
 
 
 /* Unified sensor driver for the magnetometer */
-class HMC5883 : public Adafruit_Sensor
+class ITG3200 : public Adafruit_Sensor
 {
   public:
-    HMC5883(int32_t sensorID = -1);
+    ITG3200(int32_t sensorID = -1);
   
     bool begin(void);
-    void setMagGain(hmc5883MagGain gain);
     bool getEvent(sensors_event_t*);
     void getSensor(sensor_t*);
 
   private:
-    hmc5883MagGain   _magGain;
-    hmc5883MagData   _magData;     // Last read magnetometer data will be available here
-    int32_t         _sensorID;
+    itg3200GyroData   _gyroData;     // Last read gyroscopic sensor data will be available here
+    int32_t       _sensorID;
     
     void write8(byte address, byte reg, byte value);
-    byte read8(byte address, byte reg);
+    //byte read8(byte address, byte reg);
     void read(void);
 };
 
