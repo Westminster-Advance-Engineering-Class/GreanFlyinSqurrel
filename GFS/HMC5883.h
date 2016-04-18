@@ -14,24 +14,12 @@
   Written by Kevin Townsend for Adafruit Industries.  
   BSD license, all text above must be included in any redistribution
  ***************************************************************************/
-#ifndef __HMC5883_H__
-#define __HMC5883_H__
+#ifndef HMC5883_H
+#define HMC5883_H
 
-#if (ARDUINO >= 100)
- #include "Arduino.h"
-#else
- #include "WProgram.h"
-#endif
-
-#include <Adafruit_Sensor.h>
-
-#ifdef __AVR_ATtiny85__
-  #include "TinyWireM.h"
-  #define Wire TinyWireM
-#else
-  #include <Wire.h>
-#endif
-
+#include "Arduino.h"
+#include "Adafruit_Sensor.h"
+#include <Wire.h>
 
 /*=========================================================================
     I2C ADDRESS/BITS

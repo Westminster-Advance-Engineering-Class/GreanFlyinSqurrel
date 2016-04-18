@@ -56,7 +56,7 @@ byte ITG3200::read8(byte address, byte reg)
     @brief  Reads the raw data from the sensor
 */
 /**************************************************************************/
-void HMC5883::read()
+void ITG3200::read()
 {
   // Read the magnetometer
   Wire.beginTransmission((byte)ITG3200_ADDRESS_GYRO);
@@ -78,9 +78,6 @@ void HMC5883::read()
   _gyroData.x = (int16_t)(((int16_t)xhi << 8) | xlo);
   _gyroData.y = (int16_t)(((int16_t)yhi << 8) | ylo);
   _gyroData.z = (int16_t)(((int16_t)zhi << 8) | zlo);
-  
-  // ToDo: Calculate orientation
-  _magData.orientation = 0.0;
 }
 
 /***************************************************************************
@@ -111,7 +108,8 @@ bool ITG3200::begin()
   Wire.begin();
 
   // reset itg3200
-  write8(ITG3200_ADDRESS_GYRO, ITG3200_REGISTER_GYRO_PWR_MGM, PWR_MGM_RESET);
+  write8(ITG3200_ADDRESS_GYRO, ITG3200_REGISTER_GYRO_DLPF_FS, (DLPF_FS_SEL_0|DLPF_FS_SEL_1|DLPF_CFG_0));
+  write8(ITG3200_ADDRESS_GYRO, ITG3200_REGISTER_GYRO_SMPLRT_DIV, 9);
 
   return true;
 }

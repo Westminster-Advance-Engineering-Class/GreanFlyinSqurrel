@@ -4,7 +4,7 @@
 #define ITG3200_H
 
 #include "Arduino.h"
-#include <Adafruit_Sensor.h>
+#include "Adafruit_Sensor.h"
 #include <Wire.h>
 
 
@@ -42,12 +42,12 @@
 
     typedef enum
     {
-      DLPF_CFG_0 =    0x01; //1<<0;
-      DLPF_CFG_1 =    0x02; //1<<1;
-      DLPF_CFG_2 =    0x04; //1<<2;
-      DLPF_FS_SEL_0 = 0x08; //1<<3;
-      DLPF_FS_SEL_1 = 0x10; //1<<4;
-      PWR_MGM_RESET = 0x40; //1<<6;
+      DLPF_CFG_0 =    0x01, //1<<0,
+      DLPF_CFG_1 =    0x02, //1<<1,
+      DLPF_CFG_2 =    0x04, //1<<2,
+      DLPF_FS_SEL_0 = 0x08, //1<<3,
+      DLPF_FS_SEL_1 = 0x10, //1<<4,
+      PWR_MGM_RESET = 0x40 //1<<6
     } itg3200GyroSettings_t;
 /*=========================================================================*/
 
@@ -61,7 +61,7 @@
         float z;
     } itg3200GyroData;
 /*=========================================================================*/
-
+    
 
 /* Unified sensor driver for the magnetometer */
 class ITG3200 : public Adafruit_Sensor
@@ -73,6 +73,10 @@ class ITG3200 : public Adafruit_Sensor
     bool getEvent(sensors_event_t*);
     void getSensor(sensor_t*);
 
+    const static int X_ZERO = 31,
+               Y_ZERO = -9,
+               Z_ZERO = 26;
+  
   private:
     itg3200GyroData   _gyroData;     // Last read gyroscopic sensor data will be available here
     int32_t       _sensorID;
@@ -80,6 +84,7 @@ class ITG3200 : public Adafruit_Sensor
     void write8(byte address, byte reg, byte value);
     //byte read8(byte address, byte reg);
     void read(void);
+    int zeros[3];
 };
 
 #endif
